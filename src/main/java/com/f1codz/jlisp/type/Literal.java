@@ -2,11 +2,10 @@ package com.f1codz.jlisp.type;
 
 public class Literal extends LispType {
     public static final Literal INVALID = new Literal(null, null);
-    private String symbol;
-    private Object value;
+    public final Object value;
 
     public Literal(String symbol, Object value) {
-        this.symbol = symbol;
+        super(symbol);
         this.value = value;
     }
 

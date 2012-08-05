@@ -2,34 +2,49 @@ package com.f1codz.jlisp.factory;
 
 import com.f1codz.jlisp.type.Literal;
 
+import static org.apache.commons.lang.StringUtils.removeEnd;
+import static org.apache.commons.lang.StringUtils.removeStart;
 import static org.apache.commons.lang.StringUtils.trim;
 
 public class LiteralFactory {
     public static Literal from(String symbol) {
-        try{
+        try {
             Double value = Double.parseDouble(symbol);
             return new Literal(symbol, value);
-        }catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+        }
 
-        try{
+        try {
             Integer value = Integer.parseInt(symbol);
             return new Literal(symbol, value);
-        }catch (NumberFormatException nfe) {}
+        } catch (NumberFormatException nfe) {
+        }
 
-        try{
+        if ("true".equals(symbol) || "false".equals(symbol)) {
             Boolean value = Boolean.parseBoolean(symbol);
             return new Literal(symbol, value);
-        }catch (NumberFormatException nfe) {}
+        }
 
-        if(isQuoted(symbol)) {
-            return new Literal(symbol, symbol);
+        if (isQuoted(symbol)) {
+            return new Literal(symbol, unquote(symbol));
         }
 
         return Literal.INVALID;
     }
 
-    private static boolean isQuoted(String symbol) {
-        String trimmed = trim(symbol);
+    private static String unquote(String string) {
+        String trimmed = trim(string);
+        return removeEnd(
+                removeStart(
+                        trimmed,
+                        "'"
+                ),
+                "'"
+        );
+    }
+
+    private static boolean isQuoted(String string) {
+        String trimmed = trim(string);
         return trimmed.startsWith("'") && trimmed.endsWith("'");
     }
 }

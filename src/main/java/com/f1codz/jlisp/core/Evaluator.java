@@ -6,8 +6,9 @@ import com.f1codz.jlisp.type.Function;
 import com.f1codz.jlisp.type.LispType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.StringUtils.*;
 
@@ -38,15 +39,19 @@ public class Evaluator {
     }
 
     private List<String> unpack(final String lisp) {
-        return Arrays.asList(
-                split(
-                        removeEnd(
-                                removeStart(
-                                        lisp,
-                                        "("),
-                                ")"),
-                        " ")
-        );
+        Matcher matcher = Pattern.compile("('\\s*[^']+\\s*')|([^'\\s])").matcher(
+                removeEnd(
+                        removeStart(
+                                lisp,
+                                "("),
+                        ")"));
+
+        List<String> result = new ArrayList<String>();
+        while (matcher.find()) {
+            result.add(matcher.group());
+        }
+
+        return result;
     }
 
     private boolean isLisp(final String expression) {
