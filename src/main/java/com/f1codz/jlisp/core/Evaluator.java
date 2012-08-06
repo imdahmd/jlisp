@@ -7,10 +7,8 @@ import com.f1codz.jlisp.type.LispType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static org.apache.commons.lang.StringUtils.*;
+import static org.apache.commons.lang.StringUtils.trim;
 
 public class Evaluator {
     private LispTypeFactory lispTypeFactory;
@@ -39,16 +37,11 @@ public class Evaluator {
     }
 
     private List<String> unpack(final String lisp) {
-        Matcher matcher = Pattern.compile("('\\s*[^']+\\s*')|([^'\\s])").matcher(
-                removeEnd(
-                        removeStart(
-                                lisp,
-                                "("),
-                        ")"));
-
         List<String> result = new ArrayList<String>();
-        while (matcher.find()) {
-            result.add(matcher.group());
+
+        LispParser lispParser = new LispParser(lisp);
+        while (lispParser.hasNextUnit()) {
+            result.add(lispParser.nextUnit());
         }
 
         return result;

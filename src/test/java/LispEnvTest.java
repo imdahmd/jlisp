@@ -14,11 +14,11 @@ public class LispEnvTest {
 
     @Test
     public void shouldEvaluateListExpressionAndReturnResult_One() {
-        String lisp = "(+ 1 2)";
+        String lisp = "(+ (+ 1 2 (+ 3 4)) 6)";
 
         String result = lispEnv.eval(lisp);
 
-        assertEquals((Double) 3.0, Double.valueOf(result));
+        assertEquals((Double) 16.0, Double.valueOf(result));
     }
 
     @Test
