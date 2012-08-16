@@ -1,6 +1,5 @@
 package com.f1codz.jlisp.core;
 
-import com.f1codz.jlisp.exception.FunctionExpectedException;
 import com.f1codz.jlisp.factory.LispTypeFactory;
 import com.f1codz.jlisp.type.Function;
 import com.f1codz.jlisp.type.LispType;
@@ -8,7 +7,9 @@ import com.f1codz.jlisp.type.LispType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.commons.lang.StringUtils.trim;
+import static com.f1codz.jlisp.core.LispParser.isLisp;
+import static com.f1codz.jlisp.core.LispParser.undress;
+import static com.f1codz.jlisp.util.Assertions.assertFunction;
 
 public class Evaluator {
     private LispTypeFactory lispTypeFactory;
@@ -21,34 +22,16 @@ public class Evaluator {
         if (isLisp(expression)) {
             final List<LispType> lispTypes = new ArrayList<LispType>();
 
-            for (String subLisp : unpack(expression)) {
+            for (String subLisp : undress(expression)) {
                 lispTypes.add(evaluate(subLisp));
             }
 
-            final LispType function = lispTypes.get(0);
-            if (!(function instanceof Function))
-                throw new FunctionExpectedException(function);
+            final Function function = assertFunction(lispTypes.get(0));
 
             final List<LispType> params = lispTypes.subList(1, lispTypes.size());
-            return ((Function) function).apply(params);
+            return function.apply(params);
         }
 
-        return lispTypeFactory.from(expression);
-    }
-
-    private List<String> unpack(final String lisp) {
-        List<String> result = new ArrayList<String>();
-
-        LispParser lispParser = new LispParser(lisp);
-        while (lispParser.hasNextUnit()) {
-            result.add(lispParser.nextUnit());
-        }
-
-        return result;
-    }
-
-    private boolean isLisp(final String expression) {
-        String trimmed = trim(expression);
-        return trimmed.startsWith("(") && trimmed.endsWith(")");
+        return lispTypeFactory.typeFrom(expression);
     }
 }

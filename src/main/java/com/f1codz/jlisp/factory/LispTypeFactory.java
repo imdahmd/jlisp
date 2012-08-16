@@ -12,7 +12,7 @@ public class LispTypeFactory {
         this.variableStack = variableStack;
     }
 
-    public LispType from(String symbol) {
+    public LispType typeFrom(String symbol) {
         Literal literal = LiteralFactory.from(symbol);
         if (Literal.isValid(literal))
             return literal;

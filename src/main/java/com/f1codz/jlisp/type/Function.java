@@ -10,7 +10,7 @@ public abstract class Function extends LispType {
     public abstract LispType apply(List<LispType> params);
 
     protected Literal assertLiteral(LispType param) {
-        if(!(param instanceof Literal))
+        if (!(param instanceof Literal))
             throw new UnsupportedOperationException(String.format("function %s cant be applied to %s", this.symbol, param.symbol));
 
         return (Literal) param;

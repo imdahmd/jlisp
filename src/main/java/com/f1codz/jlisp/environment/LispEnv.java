@@ -8,13 +8,13 @@ public class LispEnv {
     private Evaluator evaluator;
 
     public LispEnv() {
-         VariableStack variableStack = new VariableStack();
-         variableStack.add(new PlusFunction());
+        VariableStack variableStack = new VariableStack();
+        variableStack.add(new PlusFunction());
 
-         LispTypeFactory lispTypeFactory = new LispTypeFactory(variableStack);
+        LispTypeFactory lispTypeFactory = new LispTypeFactory(variableStack);
 
-         this.evaluator  = new Evaluator(lispTypeFactory);
-     }
+        this.evaluator = new Evaluator(lispTypeFactory);
+    }
 
     public String eval(String lispExpression) {
         return evaluator.evaluate(lispExpression).symbol;

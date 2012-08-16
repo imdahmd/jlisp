@@ -6,6 +6,10 @@ import com.f1codz.jlisp.type.Literal;
 
 import java.util.List;
 
+import static com.f1codz.jlisp.util.Assertions.assertNumber;
+import static com.f1codz.jlisp.util.Assertions.assertString;
+import static com.f1codz.jlisp.util.LispExpressionUtils.quote;
+
 public class PlusFunction extends Function {
     public PlusFunction() {
         super("+");
@@ -44,23 +48,5 @@ public class PlusFunction extends Function {
         }
 
         return new Literal(result.toString(), result);
-    }
-
-    private String quote(String string) {
-        return "'" + string + "'";
-    }
-
-    private String assertString(Literal literal) {
-        if (!(literal.value instanceof String))
-            throw new UnsupportedOperationException(String.format("Expected string, found %s", literal.symbol));
-
-        return (String) literal.value;
-    }
-
-    private Number assertNumber(Literal literal) {
-        if (!(literal.value instanceof Number))
-            throw new UnsupportedOperationException(String.format("Expected number, found %s", literal.symbol));
-
-        return (Number) literal.value;
     }
 }

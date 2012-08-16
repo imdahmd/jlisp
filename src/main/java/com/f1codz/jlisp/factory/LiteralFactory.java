@@ -2,9 +2,8 @@ package com.f1codz.jlisp.factory;
 
 import com.f1codz.jlisp.type.Literal;
 
-import static org.apache.commons.lang.StringUtils.removeEnd;
-import static org.apache.commons.lang.StringUtils.removeStart;
-import static org.apache.commons.lang.StringUtils.trim;
+import static com.f1codz.jlisp.util.LispExpressionUtils.isQuoted;
+import static com.f1codz.jlisp.util.LispExpressionUtils.unquote;
 
 public class LiteralFactory {
     public static Literal from(String symbol) {
@@ -30,21 +29,5 @@ public class LiteralFactory {
         }
 
         return Literal.INVALID;
-    }
-
-    private static String unquote(String string) {
-        String trimmed = trim(string);
-        return removeEnd(
-                removeStart(
-                        trimmed,
-                        "'"
-                ),
-                "'"
-        );
-    }
-
-    private static boolean isQuoted(String string) {
-        String trimmed = trim(string);
-        return trimmed.startsWith("'") && trimmed.endsWith("'");
     }
 }
