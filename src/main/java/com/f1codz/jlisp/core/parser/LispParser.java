@@ -1,5 +1,7 @@
 package com.f1codz.jlisp.core.parser;
 
+import com.f1codz.jlisp.exception.LispParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +25,19 @@ public class LispParser {
     }
 
     /**
-     * *************************** Private Code ****************************
+     * Private Code
      */
 
     private Lisp lisp;
 
+    private List<UnitParser> parsers;
+
     private LispParser(Lisp lisp) {
+        parsers = new ArrayList<UnitParser>();
+        parsers.add(new SublispParser());
+        parsers.add(new QuotedUnitParser());
+        parsers.add(new NormalUnitParser());
+
         this.lisp = lisp;
     }
 
@@ -37,6 +46,13 @@ public class LispParser {
     }
 
     private String nextUnit() {
-        return UnitParsers.nextFor(lisp).parse(lisp);
+        char currentChar = lisp.currentChar();
+        for (UnitParser unitParser : parsers) {
+            if (unitParser.fitsFor(currentChar)) {
+                return unitParser.parse(lisp);
+            }
+        }
+
+        throw new LispParseException(lisp.value());
     }
 }
