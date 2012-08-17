@@ -1,18 +1,15 @@
 package com.f1codz.jlisp.util;
 
-import static org.apache.commons.lang.StringUtils.removeEnd;
-import static org.apache.commons.lang.StringUtils.removeStart;
-import static org.apache.commons.lang.StringUtils.trim;
+import static java.lang.Character.isWhitespace;
 
 public class LispExpressionUtils {
 
-    private static final String QUOTE_STRING = "'";
-    private static final char QUOTE_CHAR = '\'';
-    private static final char LISP_START_CHAR = '(';
-    private static final char LISP_END_CHAR = ')';
+    public static final char QUOTE_CHAR = '\'';
+    public static final char LISP_START = '(';
+    public static final char LISP_END = ')';
 
     public static String quote(String string) {
-        return QUOTE_STRING + string + QUOTE_STRING;
+        return String.valueOf(QUOTE_CHAR) + string + String.valueOf(QUOTE_CHAR);
     }
 
     public static String unquote(String string) {
@@ -20,22 +17,46 @@ public class LispExpressionUtils {
         return removeEnd(
                 removeStart(
                         trimmed,
-                        QUOTE_STRING
+                        String.valueOf(QUOTE_CHAR)
                 ),
-                QUOTE_STRING
+                String.valueOf(QUOTE_CHAR)
         );
     }
 
     public static boolean isQuoted(String string) {
         String trimmed = trim(string);
-        return trimmed.startsWith(QUOTE_STRING) && trimmed.endsWith(QUOTE_STRING);
+        return trimmed.startsWith(String.valueOf(QUOTE_CHAR)) && trimmed.endsWith(String.valueOf(QUOTE_CHAR));
     }
 
     public static boolean isNotAValidNormalUnitChar(char c) {
-        return isSpaceChar(c) || c == LISP_START_CHAR || c == LISP_END_CHAR || c == QUOTE_CHAR;
+        return isWhitespace(c) || c == LISP_START || c == LISP_END || c == QUOTE_CHAR;
     }
 
-    public static boolean isSpaceChar(char c) {
-        return org.apache.commons.lang.StringUtils.isWhitespace(String.valueOf(c));
+    public static String trim(String str) {
+        return str == null ? null : str.trim();
+    }
+
+    public static boolean isEmpty(String str) {
+        return str == null || str.length() == 0;
+    }
+
+    public static String removeEnd(String str, String remove) {
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.endsWith(remove)) {
+            return str.substring(0, str.length() - remove.length());
+        }
+        return str;
+    }
+
+    public static String removeStart(String str, String remove) {
+        if (isEmpty(str) || isEmpty(remove)) {
+            return str;
+        }
+        if (str.startsWith(remove)){
+            return str.substring(remove.length());
+        }
+        return str;
     }
 }

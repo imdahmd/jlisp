@@ -7,8 +7,8 @@ import com.f1codz.jlisp.type.LispType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.f1codz.jlisp.core.LispParser.isLisp;
-import static com.f1codz.jlisp.core.LispParser.undress;
+import static com.f1codz.jlisp.core.parser.LispParser.isLisp;
+import static com.f1codz.jlisp.core.parser.LispParser.undress;
 import static com.f1codz.jlisp.util.Assertions.assertFunction;
 
 public class Evaluator {

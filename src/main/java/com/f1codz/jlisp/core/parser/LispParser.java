@@ -1,20 +1,14 @@
-package com.f1codz.jlisp.core;
+package com.f1codz.jlisp.core.parser;
 
 import com.f1codz.jlisp.exception.LispParseException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.f1codz.jlisp.util.LispExpressionUtils.isNotAValidNormalUnitChar;
-import static com.f1codz.jlisp.util.LispExpressionUtils.isSpaceChar;
-import static org.apache.commons.lang.StringUtils.trim;
+import static com.f1codz.jlisp.util.LispExpressionUtils.*;
 
 public class LispParser {
-    private static final String LISP_START_STRING = "(";
-    private static final String LISP_END_STRING = ")";
-
-    private String lisp;
-    private int curPos;
+    private Lisp lisp;
 
     public static List<String> undress(final String lisp) {
         List<String> result = new ArrayList<String>();
@@ -29,20 +23,19 @@ public class LispParser {
 
     public static boolean isLisp(final String expression) {
         String trimmed = trim(expression);
-        return trimmed.startsWith(LISP_START_STRING) && trimmed.endsWith(LISP_END_STRING);
+        return trimmed.startsWith(String.valueOf(LISP_START)) && trimmed.endsWith(String.valueOf(LISP_END));
+    }
+
+    private LispParser(Lisp lisp) {
+        this.lisp = lisp;
     }
 
     private static LispParser forLispExpression(String lisp) {
-        return new LispParser(lisp);
-    }
-
-    private LispParser(String lisp) {
-        this.lisp = trim(lisp);
-        this.curPos = 0;
+        return new LispParser(new Lisp(lisp));
     }
 
     private boolean hasNextUnit() {
-        return curPos != lisp.length() && nextNonSpaceChar() != ')';
+        return lisp.nextNonSpaceChar() != LISP_END;
     }
 
     private String nextUnit() {
@@ -58,11 +51,11 @@ public class LispParser {
         if (nextNormalUnit != null)
             return nextNormalUnit;
 
-        throw new LispParseException(lisp);
+        throw new LispParseException(lisp.value());
     }
 
     private String isNextUnit_SubLisp() {
-        final char currentChar = currentChar();
+        final char currentChar = lisp.currentChar();
         if (currentChar != '(')
             return null;
 
@@ -71,7 +64,7 @@ public class LispParser {
 
         int countSubSubLisps = 0;
         while (true) {
-            char nextChar = nextChar();
+            char nextChar = lisp.nextChar();
             result.append(nextChar);
 
             if (nextChar == ')' && countSubSubLisps == 0)
@@ -87,7 +80,7 @@ public class LispParser {
     }
 
     private String isNextUnit_Quoted() {
-        final char currentChar = currentChar();
+        final char currentChar = lisp.currentChar();
         if (currentChar != '\'')
             return null;
 
@@ -95,7 +88,7 @@ public class LispParser {
         result.append(currentChar);
 
         while (true) {
-            char nextChar = nextChar();
+            char nextChar = lisp.nextChar();
             result.append(nextChar);
 
             if (nextChar == '\'')
@@ -106,7 +99,7 @@ public class LispParser {
     }
 
     private String isNextUnit_Normal() {
-        final char currentChar = currentChar();
+        final char currentChar = lisp.currentChar();
         if (isNotAValidNormalUnitChar(currentChar))
             return null;
 
@@ -114,9 +107,9 @@ public class LispParser {
         result.append(currentChar);
 
         while (true) {
-            char nextChar = nextChar();
+            char nextChar = lisp.nextChar();
             if (isNotAValidNormalUnitChar(nextChar)) {
-                prevChar();
+                lisp.prevChar();
                 break;
             }
 
@@ -124,33 +117,5 @@ public class LispParser {
         }
 
         return result.toString();
-    }
-
-    private char nextNonSpaceChar() {
-        do {
-            curPos++;
-        } while (isSpaceChar(currentChar()));
-
-        return currentChar();
-    }
-
-    private char nextChar() {
-        curPos++;
-
-        return currentChar();
-    }
-
-    private char prevChar() {
-        curPos--;
-
-        return currentChar();
-    }
-
-    private char currentChar() {
-        try {
-            return lisp.charAt(curPos);
-        } catch (StringIndexOutOfBoundsException e) {
-            throw new LispParseException(lisp);
-        }
     }
 }
