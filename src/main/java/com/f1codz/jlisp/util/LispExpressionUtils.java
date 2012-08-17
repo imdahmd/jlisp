@@ -28,8 +28,8 @@ public class LispExpressionUtils {
         return trimmed.startsWith(String.valueOf(QUOTE_CHAR)) && trimmed.endsWith(String.valueOf(QUOTE_CHAR));
     }
 
-    public static boolean isNotAValidNormalUnitChar(char c) {
-        return isWhitespace(c) || c == LISP_START || c == LISP_END || c == QUOTE_CHAR;
+    public static boolean isNormalUnitChar(char c) {
+        return !(isWhitespace(c) || c == LISP_START || c == LISP_END || c == QUOTE_CHAR);
     }
 
     public static String trim(String str) {

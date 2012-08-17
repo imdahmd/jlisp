@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.f1codz.jlisp.core.parser.LispParser.isLisp;
-import static com.f1codz.jlisp.core.parser.LispParser.undress;
+import static com.f1codz.jlisp.core.parser.LispParser.unpack;
 import static com.f1codz.jlisp.util.Assertions.assertFunction;
 
 public class Evaluator {
@@ -22,7 +22,7 @@ public class Evaluator {
         if (isLisp(expression)) {
             final List<LispType> lispTypes = new ArrayList<LispType>();
 
-            for (String subLisp : undress(expression)) {
+            for (String subLisp : unpack(expression)) {
                 lispTypes.add(evaluate(subLisp));
             }
 
