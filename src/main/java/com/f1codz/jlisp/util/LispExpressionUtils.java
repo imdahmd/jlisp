@@ -1,7 +1,5 @@
 package com.f1codz.jlisp.util;
 
-import static java.lang.Character.isWhitespace;
-
 public class LispExpressionUtils {
 
     public static final char QUOTE_CHAR = '\'';
@@ -26,10 +24,6 @@ public class LispExpressionUtils {
     public static boolean isQuoted(String string) {
         String trimmed = trim(string);
         return trimmed.startsWith(String.valueOf(QUOTE_CHAR)) && trimmed.endsWith(String.valueOf(QUOTE_CHAR));
-    }
-
-    public static boolean isNormalUnitChar(char c) {
-        return !(isWhitespace(c) || c == LISP_START || c == LISP_END || c == QUOTE_CHAR);
     }
 
     public static String trim(String str) {

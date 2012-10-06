@@ -21,14 +21,13 @@ public class Evaluator {
     public LispType evaluate(String expression) {
         if (isLisp(expression)) {
             final List<LispType> lispTypes = new ArrayList<LispType>();
-
             for (String subLisp : unpack(expression)) {
                 lispTypes.add(evaluate(subLisp));
             }
 
             final Function function = assertFunction(lispTypes.get(0));
-
             final List<LispType> params = lispTypes.subList(1, lispTypes.size());
+
             return function.apply(params);
         }
 

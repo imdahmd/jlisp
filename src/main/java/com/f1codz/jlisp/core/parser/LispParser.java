@@ -34,7 +34,7 @@ public class LispParser {
 
     private LispParser(Lisp lisp) {
         parsers = new ArrayList<UnitParser>();
-        parsers.add(new SublispParser());
+        parsers.add(new SubLispParser());
         parsers.add(new QuotedUnitParser());
         parsers.add(new NormalUnitParser());
 

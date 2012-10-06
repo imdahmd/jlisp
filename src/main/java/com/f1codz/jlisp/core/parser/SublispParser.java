@@ -3,7 +3,7 @@ package com.f1codz.jlisp.core.parser;
 import static com.f1codz.jlisp.util.LispExpressionUtils.LISP_END;
 import static com.f1codz.jlisp.util.LispExpressionUtils.LISP_START;
 
-class SublispParser implements UnitParser {
+class SubLispParser implements UnitParser {
         public boolean fitsFor(char currentChar) {
             return currentChar == LISP_START;
         }
