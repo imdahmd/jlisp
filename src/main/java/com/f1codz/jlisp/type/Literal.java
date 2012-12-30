@@ -9,6 +9,11 @@ public class Literal extends LispType {
         this.value = value;
     }
 
+    public Literal(String symbol) {
+        super(symbol);
+        this.value = symbol;
+    }
+
     public static boolean isValid(Literal literal) {
         return !INVALID.equals(literal);
     }

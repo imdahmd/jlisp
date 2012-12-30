@@ -1,5 +1,6 @@
 package com.f1codz.jlisp.factory;
 
+import com.f1codz.jlisp.type.Fraction;
 import com.f1codz.jlisp.type.Literal;
 
 import static com.f1codz.jlisp.util.LispExpressionUtils.isQuoted;
@@ -26,6 +27,11 @@ public class LiteralFactory {
 
         if (isQuoted(symbol)) {
             return new Literal(symbol, unquote(symbol));
+        }
+
+        try {
+            return Fraction.parseFraction(symbol);
+        } catch (NumberFormatException nfe) {
         }
 
         return Literal.INVALID;

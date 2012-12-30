@@ -50,14 +50,24 @@ public class LispEnvTest {
         assertEquals(expected, Double.valueOf(result));
 
     }
+    
+    @Test
+    public void shouldEvaluateListExpressionAndReturnResult_Five() {
+        String lisp = "(/ 15 3)";
+        String expected = "5";
+
+        String result = lispEnv.eval(lisp);
+
+        assertEquals(expected, result);
+    }
 
     @Test
-    @Ignore
-    public void shouldEvaluateAFunction() {
-        String lispFunction = "($(* %1 %2) 3 4)";
+    public void shouldEvaluateListExpressionAndReturnResult_six() {
+        String lisp = "(/ 15 27)";
+        String expected = "5/9";
 
-        String result = lispEnv.eval(lispFunction);
+        String result = lispEnv.eval(lisp);
 
-        assertEquals((Double) 12.0, Double.valueOf(result));
+        assertEquals(expected, result);
     }
 }

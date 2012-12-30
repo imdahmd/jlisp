@@ -7,8 +7,6 @@ import com.f1codz.jlisp.type.Literal;
 
 import java.util.List;
 
-import static com.f1codz.jlisp.util.Assertions.assertNumber;
-
 public class DivideFunction extends Function {
     public DivideFunction() {
         super("/");
@@ -23,15 +21,17 @@ public class DivideFunction extends Function {
         Fraction result = assertFraction(assertLiteral(params.get(0)));
 
         for (LispType param : params.subList(1, params.size())) {
-            Literal literal = assertLiteral(param);
-            Fraction value = assertFraction(literal);
-            result.divide(value);
+            result = result.divide(assertFraction(assertLiteral(param)));
         }
 
-        return new Literal(result.toString(), result);
+        return result;
     }
 
     private Fraction assertFraction(Literal literal) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        if(literal instanceof Fraction){
+            return (Fraction) literal;
+        } else {
+            return Fraction.parseFraction(literal.symbol);
+        }
     }
 }
